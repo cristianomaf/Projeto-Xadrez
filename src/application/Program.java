@@ -1,15 +1,13 @@
 package application;
 
-import tabuleiro.Posicao;
+import tabuleiro.Tabuleiro;
 
 public class Program {
 
 	public static void main(String[] args) {
-		Posicao p1 = new Posicao(3, 2);
 		
-		System.out.println(p1);
-		
-
+		//teste de instanciar tabuleiro para verificar se esta ok ate aqui
+		Tabuleiro tabuleiro1 = new Tabuleiro(2, 5);
 	}
 
 }
