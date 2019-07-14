@@ -17,10 +17,10 @@ public class PartidaXadrez {
 
 	// metodo
 	public PecaXadrez[][] getPecas() { // ele retorna as pecas do tipo PEcaXadrez e nao as pecas internas do tabuleiro
-		PecaXadrez[][] mat = new PecaXadrez[tabuleiro.getLinha()][tabuleiro.getColuna()];
+		PecaXadrez[][] mat = new PecaXadrez[tabuleiro.getLinhas()][tabuleiro.getColunas()];
 		// percorrer a matriz pecas
-		for (int i = 0; i < tabuleiro.getLinha(); i++) {
-			for (int j = 0; j < tabuleiro.getColuna(); j++) {
+		for (int i = 0; i < tabuleiro.getLinhas(); i++) {
+			for (int j = 0; j < tabuleiro.getColunas(); j++) {
 				mat[i][j] = (PecaXadrez) tabuleiro.peca(i, j); //downcasting para peca xadrez
 			}
 		}
@@ -28,7 +28,9 @@ public class PartidaXadrez {
 		}	
 	private void inicialConfig() {
 		tabuleiro.colocaPeca(new Torre(tabuleiro,Cor.BRANCA), new Posicao(2,1));
-		tabuleiro.colocaPeca(new Rei(tabuleiro,Cor.PRETO), new Posicao(0,4));
+		tabuleiro.colocaPeca(new Rei(tabuleiro,Cor.BRANCA), new Posicao(0,4));
+		tabuleiro.colocaPeca(new Rei(tabuleiro,Cor.PRETO), new Posicao(7,4));
+		
 	}
 	
 
