@@ -1,6 +1,9 @@
 package xadrez;
 
+import tabuleiro.Posicao;
 import tabuleiro.Tabuleiro;
+import xadrez.pecas.Rei;
+import xadrez.pecas.Torre;
 
 public class PartidaXadrez {
 	// Partida tem que ter um tabuleiro
@@ -9,6 +12,7 @@ public class PartidaXadrez {
 	// construtor padrao
 	public PartidaXadrez() {
 		tabuleiro = new Tabuleiro(8, 8);
+		inicialConfig();
 	}
 
 	// metodo
@@ -20,7 +24,12 @@ public class PartidaXadrez {
 				mat[i][j] = (PecaXadrez) tabuleiro.peca(i, j); //downcasting para peca xadrez
 			}
 		}
-		return mat;
+		return mat;		
+		}	
+	private void inicialConfig() {
+		tabuleiro.colocaPeca(new Torre(tabuleiro,Cor.BRANCA), new Posicao(2,1));
+		tabuleiro.colocaPeca(new Rei(tabuleiro,Cor.PRETO), new Posicao(0,4));
 	}
+	
 
 }

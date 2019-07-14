@@ -41,4 +41,14 @@ public class Tabuleiro {
 	public Peca peca(Posicao posicao) {
 		return pecas[posicao.getLinha()][posicao.getColuna()];
 	}
+	//metodo colocar pecas
+	public void colocaPeca(Peca peca, Posicao posicao) { // recebe uma peca e uma posicao
+		//dentro da matriz na linha e coluna indicada recebe a peca
+		pecas[posicao.getLinha()][posicao.getColuna()] = peca; 
+		//peca criada recebe a posicao nova recebida como parametro do metodo
+		peca.posicao = posicao; 
+	}
+	
+	
+	
 }
