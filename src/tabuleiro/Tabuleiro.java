@@ -54,6 +54,21 @@ public class Tabuleiro {
 		// peca criada recebe a posicao nova recebida como parametro do metodo
 		peca.posicao = posicao;
 	}
+	
+	//metodo remover pecas
+	public Peca removerPeca(Posicao posicao) {
+		if (!posicaoExiste(posicao)) {
+			throw new TabuleiroExcecao("Posicao não existe no tabuleiro");
+		}
+		if(peca(posicao) == null) {  // verifica se a posicao tem alguma peca
+			return null;
+		}
+		Peca aux = peca(posicao); // variavel auxiliar que recebe a peca caso exista peca na posicao
+		aux.posicao = null; // variavel auxiliar recebe nulo como posicao
+		pecas[posicao.getLinha()][posicao.getColuna()] = null; // na matriz de pecas na posicao onde removemos a peca sera nulo
+		return aux; // contem a peca retirada
+	}
+	
 
 	// metodo auxiliar de teste
 	private boolean posicaoExiste(int linha, int coluna) {

@@ -1,7 +1,11 @@
 package application;
 
+import java.util.InputMismatchException;
+import java.util.Scanner;
+
 import xadrez.Cor;
 import xadrez.PecaXadrez;
+import xadrez.XadrezPosicao;
 
 public class Interface {
 	// https://stackoverflow.com/questions/5762491/how-to-print-color-in-console-using-system-out-println
@@ -25,6 +29,19 @@ public class Interface {
 		public static final String ANSI_CYAN_BACKGROUND = "\u001B[46m";
 		public static final String ANSI_WHITE_BACKGROUND = "\u001B[47m";
 	
+		//metodo para ler posicao 
+		public static XadrezPosicao lerXadrezPosicao (Scanner scan) {
+			try {
+			String s = scan.nextLine();
+			char coluna = s.charAt(0);
+			int linha = Integer.parseInt(s.substring(1)); //capura numero apartir da posicao 1 da string
+			return new XadrezPosicao(coluna,linha);
+			}
+			catch (RuntimeException e) {
+				throw new InputMismatchException("Erro lendo posicao de Xadrez. Valores validos sao de a1 ate h8");
+			}
+			
+		}
 		
 		// metodo static pois eh da classe apenas
 	public static void ImpressaoTabuleiro(PecaXadrez[][] pecas) { // recebe uma matriz de pecasXadrez
