@@ -27,33 +27,36 @@ public class PartidaXadrez {
 		}
 		return mat;
 	}
-	
-	//metodo movimento peca que recebe como parametros posicao origem e uma de destino
-	public PecaXadrez MovimentoPeca(XadrezPosicao posicaoOrigem,XadrezPosicao posicaoDestino) {
-		//converte posicao para posicao de matriz
+
+	// metodo movimento peca que recebe como parametros posicao origem e uma de
+	// destino
+	public PecaXadrez MovimentoPeca(XadrezPosicao posicaoOrigem, XadrezPosicao posicaoDestino) {
+		// converte posicao para posicao de matriz
 		Posicao origem = posicaoOrigem.paraPosicao();
 		Posicao destino = posicaoDestino.paraPosicao();
 		validacaoPosicaoOrigem(origem);
-		Peca pecaCapturada = FazerMovimento(origem,destino);
-		return (PecaXadrez)pecaCapturada;
+		Peca pecaCapturada = FazerMovimento(origem, destino);
+		return (PecaXadrez) pecaCapturada;
 	}
-	
+
 	private Peca FazerMovimento(Posicao origem, Posicao destino) {
-		
+
 		Peca p = tabuleiro.removerPeca(origem);
 		Peca pecaCapturada = tabuleiro.removerPeca(destino);
 		tabuleiro.colocaPeca(p, destino);
 		return pecaCapturada;
 	}
-	
-	
+
 	private void validacaoPosicaoOrigem(Posicao posicao) {
-		if(!tabuleiro.temUmaPeca(posicao)) { // se nao existir peca nessa posicao
+		if (!tabuleiro.temUmaPeca(posicao)) { // se nao existir peca nessa posicao
 			throw new XadrezExcecao("Não existe peca na posicao de origem");
 		}
+		// existe movimentos possiveis
+		if (!tabuleiro.peca(posicao).ExisteMovimentoPossivel()) {
+			throw new XadrezExcecao("Nao existe movimentos para essa peca");
+		}
 	}
-	
-	
+
 	private void colocaNovaPeca(char coluna, int linha, PecaXadrez peca) {
 		tabuleiro.colocaPeca(peca, new XadrezPosicao(coluna, linha).paraPosicao()); // convertendo para matriz
 	}
@@ -65,7 +68,7 @@ public class PartidaXadrez {
 		colocaNovaPeca('e', 2, new Torre(tabuleiro, Cor.BRANCA));
 		colocaNovaPeca('e', 1, new Torre(tabuleiro, Cor.BRANCA));
 		colocaNovaPeca('d', 1, new Rei(tabuleiro, Cor.BRANCA));
-	
+
 		colocaNovaPeca('c', 7, new Torre(tabuleiro, Cor.PRETO));
 		colocaNovaPeca('c', 8, new Torre(tabuleiro, Cor.PRETO));
 		colocaNovaPeca('d', 7, new Torre(tabuleiro, Cor.PRETO));

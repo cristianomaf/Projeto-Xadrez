@@ -17,5 +17,14 @@ public class Torre extends PecaXadrez{ // classe Torre sera uma extensao de Peca
 	public String toString() {
 		return "R";
 	}
+
+
+
+	@Override
+	//implementacao basica torre colocando retornar uma matriz de elementos falsos o que vai fazer com que a torre nao possa se mover por enquanto
+	public boolean[][] possivelMovimentos() {
+		boolean[][] mat = new boolean[getTabuleiro().getLinhas()][getTabuleiro().getColunas()];
+		return mat;
+	}
 	
 }
