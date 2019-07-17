@@ -26,6 +26,11 @@ public class Posicao {
 	public void setColuna(int coluna) {
 		this.coluna = coluna;
 	}
+	public void setValores(int linha,int coluna) {
+		this.linha = linha;
+		this.coluna = coluna;
+	}
+	
 	
 	// sobrescrever o metodo to string para mostrar a posicao da peca na tela
 	@Override
