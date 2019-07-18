@@ -27,7 +27,15 @@ public class PartidaXadrez {
 		}
 		return mat;
 	}
-
+	//aula13  - mostrando movimentos possiveis na tela
+	public boolean [][] movimentosPossiveis(XadrezPosicao posicaoOrigem){
+		Posicao posicao = posicaoOrigem.paraPosicao(); // converte para posicao de matriz
+		validacaoPosicaoOrigem(posicao);
+		return tabuleiro.peca(posicao).possivelMovimentos();
+	}
+	
+	
+	
 	// metodo movimento peca que recebe como parametros posicao origem e uma de
 	// destino
 	public PecaXadrez MovimentoPeca(XadrezPosicao posicaoOrigem, XadrezPosicao posicaoDestino) {
