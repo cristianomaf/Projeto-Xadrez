@@ -7,13 +7,26 @@ import xadrez.pecas.Rei;
 import xadrez.pecas.Torre;
 
 public class PartidaXadrez {
+	//parte 15
+	private int turno;
+	private Cor jogadorAtual;
+	
 	// Partida tem que ter um tabuleiro
 	private Tabuleiro tabuleiro;
 
-	// construtor padrao
+	// construtor padrao alterado com novas variaveis turno e jogador atual
 	public PartidaXadrez() {
+		turno = 1;
+		jogadorAtual = Cor.BRANCA;
 		tabuleiro = new Tabuleiro(8, 8);
 		inicialConfig();
+	}
+	//metodos get das novas variaveis
+	public int getTurno() {
+		return turno;
+	}
+	public Cor getJogadorAtual() {
+		return jogadorAtual;
 	}
 
 	// metodo
@@ -36,6 +49,7 @@ public class PartidaXadrez {
 	
 	
 	
+	
 	// metodo movimento peca que recebe como parametros posicao origem e uma de
 	// destino
 	public PecaXadrez MovimentoPeca(XadrezPosicao posicaoOrigem, XadrezPosicao posicaoDestino) {
@@ -45,6 +59,9 @@ public class PartidaXadrez {
 		validacaoPosicaoOrigem(origem);
 		validacaoPosicaoDestino(origem,destino);
 		Peca pecaCapturada = FazerMovimento(origem, destino);
+		//inserido chamada do metodo para troca do turno
+		proxTurno();
+		
 		return (PecaXadrez) pecaCapturada;
 	}
 
@@ -61,9 +78,15 @@ public class PartidaXadrez {
 			throw new XadrezExcecao("Não existe peca na posicao de origem");
 		}
 		// existe movimentos possiveis
+		// alteracao verifica se jogador atual pode mexer peca de sua cor 
+		if(jogadorAtual != ((PecaXadrez)tabuleiro.peca(posicao)).getCor()) {
+			throw new XadrezExcecao("A peca escolhida nao e sua");
+		}
 		if (!tabuleiro.peca(posicao).ExisteMovimentoPossivel()) {
 			throw new XadrezExcecao("Nao existe movimentos para essa peca");
 		}
+		
+		
 	}
 	
 	private void validacaoPosicaoDestino(Posicao origem,Posicao destino) {
@@ -72,6 +95,13 @@ public class PartidaXadrez {
 			// se para peca de origem a posicao de destino nao e um movimento possivel 
 			throw new XadrezExcecao("Não possivel movimentar essa peca para a posicao escolhida");
 		}
+	}
+	
+	//metodo proximo turno
+	private void proxTurno() {
+		turno++; // turno é incrementado
+		//verifica se a cor atual for branca troca para preto caso contario fica branca
+		jogadorAtual = (jogadorAtual == Cor.BRANCA)? Cor.PRETO : Cor.BRANCA; 
 	}
 
 	private void colocaNovaPeca(char coluna, int linha, PecaXadrez peca) {

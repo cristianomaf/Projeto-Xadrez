@@ -22,7 +22,7 @@ public class Program {
 	try {
 			Interface.limpaTela();
 
-			Interface.ImpressaoTabuleiro(partida.getPecas());
+			Interface.imprimePartida(partida);
 			System.out.println();
 			System.out.println("Posicao Origem :");
 			XadrezPosicao origem = Interface.lerXadrezPosicao(scan);
@@ -31,7 +31,7 @@ public class Program {
 			//cria variavel matriz que recebe movimentos possiveis
 			boolean[][] movimentosPossiveis = partida.movimentosPossiveis(origem);
 			Interface.limpaTela();
-			Interface.ImpressaoTabuleiro(partida.getPecas(),movimentosPossiveis);
+			Interface.impressaoTabuleiro(partida.getPecas(),movimentosPossiveis);
 						
 			System.out.println();
 			System.out.println("Posicao de Destino");

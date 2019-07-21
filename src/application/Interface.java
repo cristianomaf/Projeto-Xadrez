@@ -4,6 +4,7 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import xadrez.Cor;
+import xadrez.PartidaXadrez;
 import xadrez.PecaXadrez;
 import xadrez.XadrezPosicao;
 
@@ -50,8 +51,18 @@ public class Interface {
 			
 		}
 		
+		public static void imprimePartida(PartidaXadrez partida) {
+			impressaoTabuleiro(partida.getPecas());
+			System.out.println();
+			System.out.println("Turno: "+partida.getTurno());
+			System.out.println("Aguardando Jogador: "+partida.getJogadorAtual() );
+			
+		}
+		
+		
+		
 		// metodo static pois eh da classe apenas
-	public static void ImpressaoTabuleiro(PecaXadrez[][] pecas) { // recebe uma matriz de pecasXadrez
+	public static void impressaoTabuleiro(PecaXadrez[][] pecas) { // recebe uma matriz de pecasXadrez
 		for (int i = 0; i < pecas.length; i++) {
 			System.out.print(8 - i + " ");
 			for (int j = 0; j < pecas.length; j++) {
@@ -63,7 +74,7 @@ public class Interface {
 
 	}
 	//aula 13 metodo de impressao tebuleiro (sobrecarga) passando movimentos possiveis imprimindo possicoes possiveis de mover uma peca
-	public static void ImpressaoTabuleiro(PecaXadrez[][] pecas,boolean[][] movimentosPossiveis) { 
+	public static void impressaoTabuleiro(PecaXadrez[][] pecas,boolean[][] movimentosPossiveis) { 
 		for (int i = 0; i < pecas.length; i++) {
 			System.out.print(8 - i + " ");
 			for (int j = 0; j < pecas.length; j++) {
