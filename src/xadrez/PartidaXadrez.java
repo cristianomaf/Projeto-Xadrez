@@ -1,5 +1,8 @@
 package xadrez;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import tabuleiro.Peca;
 import tabuleiro.Posicao;
 import tabuleiro.Tabuleiro;
@@ -9,10 +12,14 @@ import xadrez.pecas.Torre;
 public class PartidaXadrez {
 	//parte 15
 	private int turno;
-	private Cor jogadorAtual;
-	
+	private Cor jogadorAtual;		
 	// Partida tem que ter um tabuleiro
 	private Tabuleiro tabuleiro;
+	
+	//controle de pecas no tabuleiro e capturadas
+	private List<Peca> pecasNoTabuleiro = new ArrayList<>();
+	private List<Peca> pecasCapturadas = new ArrayList<>();
+	
 
 	// construtor padrao alterado com novas variaveis turno e jogador atual
 	public PartidaXadrez() {
@@ -64,13 +71,21 @@ public class PartidaXadrez {
 		
 		return (PecaXadrez) pecaCapturada;
 	}
-
+	
+	//parte 16 trocando peca da lista do tabuleiro para capturadas
 	private Peca FazerMovimento(Posicao origem, Posicao destino) {
 
 		Peca p = tabuleiro.removerPeca(origem);
-		Peca pecaCapturada = tabuleiro.removerPeca(destino);
+		Peca pecaCapturada = tabuleiro.removerPeca(destino);		
 		tabuleiro.colocaPeca(p, destino);
+		
+		if(pecaCapturada!=null) {
+			pecasNoTabuleiro.remove(pecaCapturada); // remove do tabuleiro e adiciona nas capturadas
+			pecasCapturadas.add(pecaCapturada);
+			
+		}
 		return pecaCapturada;
+		
 	}
 
 	private void validacaoPosicaoOrigem(Posicao posicao) {
@@ -104,8 +119,11 @@ public class PartidaXadrez {
 		jogadorAtual = (jogadorAtual == Cor.BRANCA)? Cor.PRETO : Cor.BRANCA; 
 	}
 
+	//parte 16 acrescentando no metodo as novas pecas na lista de pecas do tabuleiro
+	
 	private void colocaNovaPeca(char coluna, int linha, PecaXadrez peca) {
 		tabuleiro.colocaPeca(peca, new XadrezPosicao(coluna, linha).paraPosicao()); // convertendo para matriz
+		pecasNoTabuleiro.add(peca);//adiciona pecas na lista de pecas do tabuleiro
 	}
 
 	private void inicialConfig() {

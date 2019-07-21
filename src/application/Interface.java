@@ -1,7 +1,10 @@
 package application;
 
+import java.util.Arrays;
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 import xadrez.Cor;
 import xadrez.PartidaXadrez;
@@ -51,9 +54,13 @@ public class Interface {
 			
 		}
 		
-		public static void imprimePartida(PartidaXadrez partida) {
+		public static void imprimePartida(PartidaXadrez partida, List<PecaXadrez> capturadas) {
 			impressaoTabuleiro(partida.getPecas());
+			
 			System.out.println();
+			imprimePecasCapturadas(capturadas);
+			System.out.println();
+			
 			System.out.println("Turno: "+partida.getTurno());
 			System.out.println("Aguardando Jogador: "+partida.getJogadorAtual() );
 			
@@ -105,4 +112,32 @@ public class Interface {
 		}
 		System.out.print(" ");
 	}
+	
+	//parte 16
+	//filtragem de listas cria uma lista e captura de acordo com filtro
+	private static void imprimePecasCapturadas(List<PecaXadrez> capturadas) {
+		List<PecaXadrez> brancas = capturadas.parallelStream().filter(x-> x.getCor()== Cor.BRANCA).collect(Collectors.toList());
+		List<PecaXadrez> pretas = capturadas.parallelStream().filter(x-> x.getCor()== Cor.PRETO).collect(Collectors.toList());
+		//logica para impressao
+		System.out.println("Pecas capturadas");
+		System.out.print("Brancas: ");
+		//setando a cor branca
+		System.out.print(ANSI_WHITE);
+		System.out.println(Arrays.toString(brancas.toArray())); // imprime o array de pecas brancas
+		//reseta cor
+		System.out.println(ANSI_RESET);
+		
+		//exibe lista pretas
+		System.out.print("Pretas : ");
+		//setando a cor amarela no terminal
+		System.out.print(ANSI_YELLOW);
+		System.out.println(Arrays.toString(pretas.toArray())); // imprime o array de pecas brancas
+		//reseta cor
+		System.out.println(ANSI_RESET);
+		
+		
+		
+		
+	}
+	
 }
