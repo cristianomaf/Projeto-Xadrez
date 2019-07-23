@@ -2,6 +2,7 @@ package xadrez;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import tabuleiro.Peca;
 import tabuleiro.Posicao;
@@ -15,6 +16,8 @@ public class PartidaXadrez {
 	private Cor jogadorAtual;		
 	// Partida tem que ter um tabuleiro
 	private Tabuleiro tabuleiro;
+	//parte 17 
+	private boolean check; // propriedade check do xadrez
 	
 	//controle de pecas no tabuleiro e capturadas
 	private List<Peca> pecasNoTabuleiro = new ArrayList<>();
@@ -26,6 +29,7 @@ public class PartidaXadrez {
 		turno = 1;
 		jogadorAtual = Cor.BRANCA;
 		tabuleiro = new Tabuleiro(8, 8);
+		check = false; // isso nao e necessario atribiur pois normalemente ela ja comeca com false
 		inicialConfig();
 	}
 	//metodos get das novas variaveis
@@ -34,6 +38,10 @@ public class PartidaXadrez {
 	}
 	public Cor getJogadorAtual() {
 		return jogadorAtual;
+	}
+	
+	public boolean getCheck() {
+		return check;
 	}
 
 	// metodo
@@ -66,6 +74,18 @@ public class PartidaXadrez {
 		validacaoPosicaoOrigem(origem);
 		validacaoPosicaoDestino(origem,destino);
 		Peca pecaCapturada = FazerMovimento(origem, destino);
+		//parte 17 depois de executar movimento testar se o jogador nao esta se coloando em check
+		if(testCheck(jogadorAtual)) {
+			desfazerMovimento(origem, destino, pecaCapturada); // desfaz o movimento e adiciona excecao
+			throw new XadrezExcecao ("Voce nao pode se colocar em check");
+			
+		}
+		//verificar se o oponente ficou em check apos a jogada
+		check = (testCheck(oponente(jogadorAtual))) ? true : false;
+							// test check recebe uma cor como parametro
+							// oponente metodo que recebe cor
+							// jogador atual e uma cor
+		
 		//inserido chamada do metodo para troca do turno
 		proxTurno();
 		
@@ -87,6 +107,23 @@ public class PartidaXadrez {
 		return pecaCapturada;
 		
 	}
+	//parte 17 metodo para desfazer movimento 
+	private void desfazerMovimento(Posicao origem, Posicao destino, Peca pecaCapturada) {
+		//cria uma peca p que recebe peca do destino
+		Peca p = tabuleiro.removerPeca(destino);		
+		//pega peca p e coloca denovo na origem
+		tabuleiro.colocaPeca(p, origem);
+		
+		if(pecaCapturada!=null) {  // se alguma peca foi capturada
+			tabuleiro.colocaPeca(pecaCapturada, destino);  //coloca peca no destino novamente
+			pecasCapturadas.remove(pecaCapturada); // remove a peca da lista capturadas 
+			pecasNoTabuleiro.add(pecaCapturada); // adicona na pecas no tabuleiro.
+		}
+		
+		
+		
+	}
+	
 
 	private void validacaoPosicaoOrigem(Posicao posicao) {
 		if (!tabuleiro.temUmaPeca(posicao)) { // se nao existir peca nessa posicao
@@ -119,8 +156,41 @@ public class PartidaXadrez {
 		jogadorAtual = (jogadorAtual == Cor.BRANCA)? Cor.PRETO : Cor.BRANCA; 
 	}
 
-	//parte 16 acrescentando no metodo as novas pecas na lista de pecas do tabuleiro
+	//parte 17 metodo oponente e localiza Rei
+	private Cor oponente (Cor cor) { // vai retornar a cor do oponente
+		return (cor == Cor.BRANCA)? Cor.PRETO: Cor.BRANCA; // se cor for branca retorno preto caso contrario retorno preto
+	}
 	
+	private PecaXadrez rei(Cor cor) { //recebe cor como argumento
+		List<Peca> list = pecasNoTabuleiro.stream().filter(x-> ((PecaXadrez)x).getCor() == cor  ).collect(Collectors.toList());
+		         //filtro de lista                        //peca x tal que
+		for(Peca p :list) { //para cada peca p da lista list
+			if(p instanceof Rei) { // se peca p for uma  instancia de rei
+				return (PecaXadrez)p; //retorna ela como pecaXadrez
+			} // e possivel que nao se encontre um rei pelo menos na logica de programa
+		}
+			throw new IllegalStateException("Nao existe rei" +cor+" no tabuleiro"); // isso nao deve ocorrer pois caso ocorra a logica do programa estara ruim
+		
+		}		
+	
+	private boolean testCheck(Cor cor) {
+		//posicao rei e converte para matriz
+		Posicao posicaoRei = rei(cor).getXadrezPosicao().paraPosicao();                              //metodo oponente devolve a cor do oponente
+		List<Peca> pecasDoOponente = pecasNoTabuleiro.stream().filter(x-> ((PecaXadrez)x).getCor()== oponente(cor)).collect(Collectors.toList());
+		for(Peca p: pecasDoOponente) { //para cada peca p na lista dde pecas do oponente
+			boolean[][]mat = p.possivelMovimentos(); // coloca em uma matriz os possiveis movimentos da peca adversaria p
+			//verificar se na matriz de posicoes possiveis de cada peca adversaria a posicao do rei esta entre as posicoes que a peca adversaria pode mover 
+			if(mat[posicaoRei.getLinha()][posicaoRei.getColuna()]) {
+				return true;
+			}
+		}
+		return false; //retorna falsa se nenhuma peca adversaria esta com possibilidade de chegar ao Rei
+	}
+	
+	
+	
+	//parte 16 acrescentando no metodo as novas pecas na lista de pecas do tabuleiro
+		
 	private void colocaNovaPeca(char coluna, int linha, PecaXadrez peca) {
 		tabuleiro.colocaPeca(peca, new XadrezPosicao(coluna, linha).paraPosicao()); // convertendo para matriz
 		pecasNoTabuleiro.add(peca);//adiciona pecas na lista de pecas do tabuleiro

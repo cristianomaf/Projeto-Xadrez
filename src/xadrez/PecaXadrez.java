@@ -18,6 +18,13 @@ public abstract class PecaXadrez extends Peca {  // sub classe de Peca
 	public Cor getCor() {
 		return cor;
 	}
+	
+	//parte 17 
+	//metodo que retorna posicao em posica de xadrez
+	public XadrezPosicao getXadrezPosicao() {
+		return XadrezPosicao.dePosicao(posicao); // pega uma posicao converte para pos. xadrez
+	}
+	
 
 	protected boolean existePecaOponente(Posicao posicao) {
 		PecaXadrez p = (PecaXadrez)getTabuleiro().peca(posicao); // fazendo dowcasting para peca Xadrez

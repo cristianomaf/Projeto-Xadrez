@@ -63,6 +63,9 @@ public class Interface {
 			
 			System.out.println("Turno: "+partida.getTurno());
 			System.out.println("Aguardando Jogador: "+partida.getJogadorAtual() );
+			if(partida.getCheck()) { // se a partida estiver em check
+				System.out.println("CHECK"); //escreve mensagem de check
+			}
 			
 		}
 		
