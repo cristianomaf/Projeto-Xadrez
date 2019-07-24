@@ -62,10 +62,17 @@ public class Interface {
 			System.out.println();
 			
 			System.out.println("Turno: "+partida.getTurno());
+			//antes de aguardar jogada 
+			if(!partida.getCheckMate()) { // se nao estiver em check mate			
 			System.out.println("Aguardando Jogador: "+partida.getJogadorAtual() );
 			if(partida.getCheck()) { // se a partida estiver em check
 				System.out.println("CHECK"); //escreve mensagem de check
 			}
+			
+		} else { 
+			System.out.println("CHECKMATE!");
+			System.out.println("Vencedor: "+partida.getJogadorAtual());
+		}
 			
 		}
 		
