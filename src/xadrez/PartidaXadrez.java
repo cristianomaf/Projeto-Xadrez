@@ -106,8 +106,9 @@ public class PartidaXadrez {
 
 	// parte 16 trocando peca da lista do tabuleiro para capturadas
 	private Peca FazerMovimento(Posicao origem, Posicao destino) {
-
-		Peca p = tabuleiro.removerPeca(origem);
+		
+		PecaXadrez p = (PecaXadrez)tabuleiro.removerPeca(origem);
+		p.incrementoContadorMovimentos(); // incremento um movimento realizado
 		Peca pecaCapturada = tabuleiro.removerPeca(destino);
 		tabuleiro.colocaPeca(p, destino);
 
@@ -123,7 +124,9 @@ public class PartidaXadrez {
 	// parte 17 metodo para desfazer movimento
 	private void desfazerMovimento(Posicao origem, Posicao destino, Peca pecaCapturada) {
 		// cria uma peca p que recebe peca do destino
-		Peca p = tabuleiro.removerPeca(destino);
+		//parte 19 so podemos chamar o metodo que decrementa sas jogadas de uma PecaXadrez
+		PecaXadrez p = (PecaXadrez)tabuleiro.removerPeca(destino);
+		p.decrementoContadorMovimentos();
 		// pega peca p e coloca denovo na origem
 		tabuleiro.colocaPeca(p, origem);
 
