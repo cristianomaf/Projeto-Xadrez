@@ -1,5 +1,6 @@
 package xadrez;
 
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,6 +26,7 @@ public class PartidaXadrez {
 	// parte 18
 	private boolean checkMate;
 	private PecaXadrez enPassantVulneravel; // inicia nula
+	private PecaXadrez promocao;
 
 	// controle de pecas no tabuleiro e capturadas
 	private List<Peca> pecasNoTabuleiro = new ArrayList<>();
@@ -57,6 +59,9 @@ public class PartidaXadrez {
 	}
 	public PecaXadrez getEnpassantVulneravel() {
 		return enPassantVulneravel;
+	}
+	public PecaXadrez getPromocao() {
+		return promocao;
 	}
 	
 
@@ -98,6 +103,18 @@ public class PartidaXadrez {
 		
 		PecaXadrez pecaMovida = (PecaXadrez)tabuleiro.peca(destino);
 		
+		// movimento especial de promocao do peao
+		promocao = null;
+		//se a peca movida for uma innstacia de peao
+		if(pecaMovida instanceof Peao) {
+			//verifica se o peao chegou ao final tanto branco quanto preto
+			if(pecaMovida.getCor() == Cor.BRANCA && destino.getLinha() ==0 ||pecaMovida.getCor() == Cor.PRETO && destino.getLinha() == 7  ) {
+				promocao = (PecaXadrez)tabuleiro.peca(destino);
+			promocao = trocaPecaPromovida("Q"); // padrao sera troca pela rainha inicialmente
+			}
+		}
+		
+		
 		// verificar se o oponente ficou em check apos a jogada
 		check = (testCheck(oponente(jogadorAtual))) ? true : false;
 		// test check recebe uma cor como parametro
@@ -123,6 +140,38 @@ public class PartidaXadrez {
 		
 		
 		return (PecaXadrez) pecaCapturada;
+	}
+	
+	//parte final
+	public PecaXadrez trocaPecaPromovida(String tipo) {
+		//se a peca promovida for null
+		if(promocao == null) {
+			throw new IllegalStateException("Nao houve peca promovida");			
+		} 
+		//verifica se a letra recebida como parametro representa uma peca valida
+		//equals para comparar o tipo classe string verifica se string B é igual a string B
+		if(!tipo.equals("B")&& !tipo.equals("R") && !tipo.equals("C") && !tipo.equals("Q")) {
+			throw new InvalidParameterException("Tipo invalido para promocao");
+		}
+		
+		Posicao pos = promocao.getXadrezPosicao().paraPosicao();
+		Peca p = tabuleiro.removerPeca(pos);
+		pecasNoTabuleiro.remove(p);
+		
+		//instancia uma nova peca para substituir o peao
+		
+		PecaXadrez novaPeca = novaPeca(tipo,promocao.getCor());
+		tabuleiro.colocaPeca(novaPeca, pos);
+		pecasNoTabuleiro.add(novaPeca);
+		
+		return novaPeca;
+	}
+	//metodo auxiliar instancia peca especifica para troca pelo peao
+	private PecaXadrez novaPeca(String tipo, Cor cor) {
+		if(tipo.equals("B")) return new Bispo(tabuleiro,cor);
+		if(tipo.equals("C")) return new Cavalo(tabuleiro,cor);
+		if(tipo.equals("Q")) return new Rainha(tabuleiro,cor);
+		return new Torre(tabuleiro,cor);
 	}
 
 	// parte 16 trocando peca da lista do tabuleiro para capturadas
